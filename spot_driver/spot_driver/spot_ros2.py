@@ -310,6 +310,7 @@ class SpotROS(Node):
         self.declare_parameter("async_tasks_rate", max_task_rate)
         # This is only done from parameter because it should be passed by the launch file
         self.name: Optional[str] = self.get_parameter("spot_name").value
+        print(f"spot_ros2 -> got spot_name: {self.name}")  # FIXME(debug): this is for debug only
         if not self.name:
             self.name = None
         self.mock: bool = self.get_parameter("mock_enable").value
@@ -348,6 +349,7 @@ class SpotROS(Node):
         if frame_prefix_param is None and self.name is not None:
             frame_prefix = self.name + "/"
         self.frame_prefix: str = frame_prefix
+        print(f"spot_ros2 -> using frame_prefix: {self.frame_prefix}")  # FIXME(debug): this is for debug only
         self.preferred_odom_frame: Parameter = self.declare_parameter(
             "preferred_odom_frame", self.frame_prefix + "odom"
         )  # 'vision' or 'odom'
@@ -362,6 +364,9 @@ class SpotROS(Node):
 
         preferred_odom_frame_references = [self.tf_name_raw_kinematic, self.tf_name_raw_vision]
         preferred_odom_frame_param: str = self.preferred_odom_frame.value
+        print(
+            f"spot_ros2 -> got preferred_odom_frame: {preferred_odom_frame_param}"
+        )  # FIXME(debug): this is for debug only
         if preferred_odom_frame_param not in preferred_odom_frame_references:
             if self.frame_prefix + preferred_odom_frame_param in preferred_odom_frame_references:
                 preferred_odom_frame_param = self.frame_prefix + preferred_odom_frame_param
@@ -372,6 +377,9 @@ class SpotROS(Node):
                 )
                 self.get_logger().error(error_msg)
                 raise ValueError(error_msg)
+        print(
+            f"spot_ros2 -> using preferred_odom_frame: {preferred_odom_frame_param}"
+        )  # FIXME(debug): this is for debug only
 
         self.tf_name_graph_nav_body: str = self.frame_prefix + "body"
 

@@ -308,13 +308,19 @@ ObjectSynchronizer::ObjectSynchronizer(const std::shared_ptr<WorldObjectClientIn
       tf_broadcaster_timer_{std::move(tf_broadcaster_timer)},
       clock_interface_{std::move(clock_interface)} {
   frame_prefix_ = parameter_interface_->getFramePrefixWithDefaultFallback();
+  std::cout << "object_synchronizer -> using frame_prefix: " << frame_prefix_
+            << std::endl;  // FIXME(debug): this is only for debug
 
   // TODO(param-refactor): this was refactored to match the logic from state_publisher,
   // find out if the stripping and re-adding wasn't done in the particular way intentionally for something
   const std::string preferred_odom_frame = parameter_interface_->getPreferredOdomFrame();
   preferred_base_frame_ = stripPrefix(preferred_odom_frame, frame_prefix_);
+  std::cout << "object_synchronizer -> got preferred_odom_frame: " << preferred_base_frame_
+            << std::endl;  // FIXME(debug): this is only for debug
   preferred_base_frame_with_prefix_ =
       preferred_odom_frame.find('/') == std::string::npos ? frame_prefix_ + preferred_odom_frame : preferred_odom_frame;
+  std::cout << "object_synchronizer -> using preferred_base_frame_with_prefix: " << preferred_base_frame_with_prefix_
+            << std::endl;  // FIXME(debug): this is only for debug
 
   // TODO(khughes): This is temporarily disabled to reduce driver's spew about TF extrapolation.
   // world_object_update_timer_->setTimer(kWorldObjectSyncPeriod, [this]() {
