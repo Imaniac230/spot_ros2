@@ -59,6 +59,8 @@ void SpotImagePublisherNode::initialize(std::unique_ptr<SpotApi> spot_api,
   const auto username = parameters->getUsername();
   const auto password = parameters->getPassword();
   const std::string frame_prefix = parameters->getFramePrefixWithDefaultFallback();
+  std::cout << "image_publisher -> connecting to api with frame_prefix: " << frame_prefix
+            << std::endl;  // FIXME(debug): this is only for debug
 
   // create and authenticate robot
   if (const auto create_robot_result = spot_api_->createRobot(hostname, port, frame_prefix); !create_robot_result) {
