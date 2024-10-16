@@ -427,6 +427,7 @@ class SpotROS(Node):
         self.declare_parameter("async_tasks_rate", max_task_rate)
         # This is only done from parameter because it should be passed by the launch file
         self.name: Optional[str] = self.get_parameter("spot_name").value
+        self.get_logger().warning(f"spot_ros2 -> got spot_name: {self.name}")  # FIXME(debug): this is for debug only
         if not self.name:
             self.name = None
         self.mock: bool = self.get_parameter("mock_enable").value
@@ -459,6 +460,9 @@ class SpotROS(Node):
         self.frame_prefix: Optional[str] = self.get_parameter_or("frame_prefix", None).value
         if self.frame_prefix is None:
             self.frame_prefix = self.name + "/" if self.name is not None else ""
+        self.get_logger().warning(
+            f"spot_ros2 -> using frame_prefix: {self.frame_prefix}"
+        )  # FIXME(debug): this is for debug only
 
         self.tf_name_graph_nav_body: str = self.frame_prefix + "body"
 
