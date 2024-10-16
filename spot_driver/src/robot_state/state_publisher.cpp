@@ -31,11 +31,19 @@ StatePublisher::StatePublisher(const std::shared_ptr<StateClientInterface>& stat
       tf_broadcaster_interface_{std::move(tf_broadcaster_interface)},
       timer_interface_{std::move(timer_interface)} {
   frame_prefix_ = parameter_interface_->getFramePrefixWithDefaultFallback();
+  std::cout << "state_publisher -> using frame_prefix: " << frame_prefix_
+            << std::endl;  // FIXME(debug): this is only for debug
 
   const std::string preferred_odom_frame = parameter_interface_->getPreferredOdomFrame();
+  std::cout << "state_publisher -> got preferred_odom_frame: " << preferred_odom_frame
+            << std::endl;  // FIXME(debug): this is only for debug
   const std::optional<std::string> valid_odom_frame = validatePreferredOdomFrame(preferred_odom_frame, frame_prefix_);
   is_using_vision_ = stripPrefix(valid_odom_frame.value_or(kValidOdomFrameOptions[0]), frame_prefix_) == "vision";
+  std::cout << "state_publisher -> got is_using_vision_: " << is_using_vision_
+            << std::endl;  // FIXME(debug): this is only for debug
   full_odom_frame_id_ = valid_odom_frame.value_or(frame_prefix_ + kValidOdomFrameOptions[0]);
+  std::cout << "state_publisher -> using full_odom_frame_id_: " << full_odom_frame_id_
+            << std::endl;  // FIXME(debug): this is only for debug
   if (!valid_odom_frame.has_value()) {
     logger_interface_->logWarn(std::string{"Given preferred odom frame '"}.append(
         preferred_odom_frame + "' could not be composed into any valid option, defaulting to: '" + full_odom_frame_id_ +

@@ -308,11 +308,19 @@ ObjectSynchronizer::ObjectSynchronizer(const std::shared_ptr<WorldObjectClientIn
       tf_broadcaster_timer_{std::move(tf_broadcaster_timer)},
       clock_interface_{std::move(clock_interface)} {
   frame_prefix_ = parameter_interface_->getFramePrefixWithDefaultFallback();
+  std::cout << "object_synchronizer -> using frame_prefix: " << frame_prefix_
+            << std::endl;  // FIXME(debug): this is only for debug
 
   const std::string preferred_odom_frame = parameter_interface_->getPreferredOdomFrame();
+  std::cout << "object_synchronizer -> got preferred_odom_frame: " << preferred_odom_frame
+            << std::endl;  // FIXME(debug): this is only for debug
   const std::optional<std::string> valid_odom_frame = validatePreferredOdomFrame(preferred_odom_frame, frame_prefix_);
   preferred_base_frame_ = stripPrefix(valid_odom_frame.value_or(kValidOdomFrameOptions[0]), frame_prefix_);
+  std::cout << "object_synchronizer -> using preferred_base_frame_: " << preferred_base_frame_
+            << std::endl;  // FIXME(debug): this is only for debug
   preferred_base_frame_with_prefix_ = valid_odom_frame.value_or(frame_prefix_ + kValidOdomFrameOptions[0]);
+  std::cout << "object_synchronizer -> using preferred_base_frame_with_prefix_: " << preferred_base_frame_with_prefix_
+            << std::endl;  // FIXME(debug): this is only for debug
   if (!valid_odom_frame.has_value()) {
     logger_interface_->logWarn(std::string{"Given preferred odom frame '"}.append(
         preferred_odom_frame + "' could not be composed into any valid option, defaulting to: '" +

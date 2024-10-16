@@ -22,6 +22,8 @@ void ImageStitcherNode::initialize(std::unique_ptr<CameraSynchronizerBase> synch
                                    std::unique_ptr<LoggerInterfaceBase> logger,
                                    std::unique_ptr<ParameterInterfaceBase> parameter_interface) {
   const std::string frame_prefix = parameter_interface->getFramePrefixWithDefaultFallback();
+  std::cout << "image_stitcher -> using frame_prefix: " << frame_prefix
+            << std::endl;  // FIXME(debug): this is only for debug
 
   stitcher_ = std::make_unique<ImageStitcher>(std::move(synchronizer), std::move(tf_listener),
                                               std::make_unique<RclcppCameraHandle>(node_, frame_prefix),
